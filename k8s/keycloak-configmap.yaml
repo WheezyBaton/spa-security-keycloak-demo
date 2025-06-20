@@ -1,0 +1,66 @@
+#oauth-project/k8s/keycloak-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+      name: keycloak-realm-config
+data:
+      realm-export.json: |
+            {
+              "realm": "myrealm",
+              "enabled": true,
+              "clients": [
+                {
+                  "clientId": "myclient",
+                  "enabled": true,
+                  "publicClient": true,
+                  "redirectUris": ["*"],
+                  "webOrigins": ["*"],
+                  "protocol": "openid-connect",
+                  "attributes": {
+                    "pkce.code.challenge.method": "S256"
+                  },
+                  "protocolMappers": [
+                    {
+                      "name": "realm roles",
+                      "protocol": "openid-connect",
+                      "protocolMapper": "oidc-usermodel-realm-role-mapper",
+                      "consentRequired": false,
+                      "config": {
+                        "multivalued": "true",
+                        "userinfo.token.claim": "true",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "claim.name": "roles",
+                        "jsonType.label": "String"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "users": [
+                {
+                  "username": "user1",
+                  "enabled": true,
+                  "credentials": [{ "type": "password", "value": "pass1" }],
+                  "realmRoles": ["user"]
+                },
+                {
+                  "username": "admin1",
+                  "enabled": true,
+                  "credentials": [{ "type": "password", "value": "admin1" }],
+                  "realmRoles": ["user", "admin"]
+                }
+              ],
+              "roles": {
+                "realm": [
+                  {
+                    "name": "user",
+                    "description": "Standard user role"
+                  },
+                  {
+                    "name": "admin",
+                    "description": "Administrator role"
+                  }
+                ]
+              }
+            }
