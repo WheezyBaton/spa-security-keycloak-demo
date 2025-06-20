@@ -15,7 +15,7 @@ spec:
             spec:
                   containers:
                         - name: frontend
-                          image: my-frontend-image:latest
+                          image: wheezybatom/my-frontend-image:latest
                           env:
                                 - name: VITE_KEYCLOAK_URL
                                   value: "http://localhost:8080/realms/myrealm"

@@ -104,17 +104,25 @@ docker build -t twoj-dockerhub-uzytkownik/my-frontend-image:latest .
 
 docker push twoj-dockerhub-uzytkownik/my-frontend-image:latest
 
-## 3. Wdróż aplikację w Kubernetes
+cd ..
+
+## 3. W pliku frontend-deployment.yaml trzeba w nazwie obrazu zmienic login na swój
+
+        containers:
+                        - name: frontend
+                          image: wheezybatom/my-frontend-image:latest
+
+## 4. Wdróż aplikację w Kubernetes
 
 kubectl apply -f k8s/
 
-## 4. Sprawdź status wdrożenia
+## 5. Sprawdź status wdrożenia
 
 kubectl get pods --watch
 
 Czekaj aż wszystkie pody będą w stanie Running (może to zająć 1-2 minuty).
 
-## 5. Może być konieczne załadowanie realma do keycloaka
+## 6. Może być konieczne załadowanie realma do keycloaka
 
 W tym celu należy stworzyć nowy realm i załadować plik keycloak/realm-config.json
 
