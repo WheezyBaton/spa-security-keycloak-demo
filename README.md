@@ -142,9 +142,9 @@ Rola - admin1
 
 ### Użytkownik - user1
 
-Hasło - user1
+Hasło - pass1
 
-Rola - pass1
+Rola - user
 
 ### Strona keycloak
 
