@@ -130,7 +130,7 @@ W tym celu należy stworzyć nowy realm i załadować plik keycloak/realm-config
 
 Dane testowe
 
-### Strona aplicaji
+### Strona aplikacji
 
 http://localhost/
 
