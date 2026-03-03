@@ -1,155 +1,99 @@
-# Projekt zabezpieczenia FE z OAuth 2.0 i PKCE w Kubernetes
+# OAuth 2.0 and PKCE Frontend Security in Kubernetes
 
-Projekt demonstruje implementację autoryzacji OAuth 2.0 z rozszerzeniem PKCE w aplikacji frontendowej React, używając Keycloak jako dostawcy tożsamości (IdP).
+This project demonstrates the implementation of **OAuth 2.0** authorization with the **PKCE** (Proof Key for Code Exchange) extension in a **React** frontend application, utilizing **Keycloak** as the Identity Provider (IdP).
 
-## Cel projektu
+## Project Objectives
 
-Zabezpieczenie FE przy użyciu standardu OAuth 2.0 z uwzględnieniem następujących kryteriów:
+The goal is to secure a frontend application using the OAuth 2.0 standard while meeting the following criteria:
 
-### Spełnienie wymagań projektu
+- **Functional Integration**: A React frontend communicating effectively with Keycloak.
+- **Kubernetes Readiness**: All components (Frontend and Keycloak) operate as separate deployments within a Kubernetes cluster, with configurations managed via ConfigMaps.
+- **Robust Security**: Application access requires authentication, JWT tokens are verified on the client side, and logout actions invalidate sessions.
+- **Role-Based Access Control (RBAC)**: A dedicated Admin Panel (`/admin`) is restricted solely to users with the "admin" role.
 
-✅ Projekt (FE, IdP) działa
+## Technologies Used
 
-- Frontend w React komunikuje się z Keycloak jako IdP
+- **Frontend**: React (Vite-based).
+- **Identity Provider**: Keycloak v22.0.5.
+- **Authentication Library**: `oidc-client-ts`.
+- **Infrastructure**: Kubernetes (K8s), Docker.
+- **Server**: Nginx (serving the frontend build).
 
-- Użytkownicy mogą się logować/wylogowywać
+## Authorization Flow
 
-- Dane użytkowników są poprawnie wyświetlane
+The security mechanism follows a modern OAuth 2.0 PKCE flow:
 
-✅ Projekt działa w Kubernetes
+1. **Application Access**: The app checks the authentication state via `AuthContext`. Unauthenticated users are presented with a login option.
+2. **Login Initiation**: Clicking the login button invokes `login()` from `AuthContext`, redirecting the user to Keycloak with a generated `code_challenge` (PKCE).
+3. **Authentication**: The user authenticates directly on the Keycloak server.
+4. **Authorization Code Redirect**: Upon success, Keycloak redirects the user back to the application with an authorization code.
+5. **Token Exchange**: The application exchanges the code for ID and Access tokens, verifying the `code_verifier` (PKCE mechanism). The decoded ID token provides user info and roles.
+6. **Resource Access**: Logged-in users access the main panel. Users with the "admin" role can access the protected Admin Panel; others are redirected.
+7. **Logout**: The logout button triggers session termination in both Keycloak and the local application.
 
-- Wszystkie komponenty działają w klastrze Kubernetes
-
-- Frontend i Keycloak są wdrażane jako osobne deploymenty
-
-- Konfiguracja Keycloak jest zarządzana przez ConfigMap
-
-✅ FE jest zabezpieczony
-
-- Dostęp do aplikacji wymaga uwierzytelnienia
-
-- Tokeny JWT są weryfikowane po stronie klienta
-
-- Wylogowanie powoduje unieważnienie sesji
-
-✅ FE ma oddzielny panel admina
-
-- Panel administratora (/admin) jest dostępny tylko dla użytkowników z rolą admin
-
-## Flow autoryzacji
-
-### Użytkownik odwiedza aplikację
-
-- Aplikacja sprawdza stan uwierzytelnienia za pomocą kontekstu AuthContext
-
-- Niezalogowani użytkownicy widzą przycisk logowania
-
-### Logowanie (LoginButton)
-
-- Kliknięcie przycisku wywołuje metodę login() z AuthContext
-
-- Aplikacja przekierowuje do Keycloak z wygenerowanym code_challenge (PKCE)
-
-### Keycloak uwierzytelnia użytkownika
-
-- Użytkownik loguje się w Keycloak
-
-- Po sukcesie Keycloak przekierowuje z powrotem do aplikacji z kodem autoryzacyjnym
-
-### Wymiana kodu na token (AuthContext)
-
-- Aplikacja wymienia kod autoryzacyjny na tokeny ID/access
-
-- Weryfikacja code_verifier (mechanizm PKCE)
-
-- Dekodowany token ID zawiera informacje o użytkowniku i rolach
-
-### Dostęp do zasobów
-
-- Zalogowani użytkownicy widzą panel główny z informacjami
-
-- Użytkownicy z rolą admin widzą link do panelu administracyjnego
-
-### Panel administratora
-
-- Dostęp tylko dla użytkowników z rolą admin
-
-- Inni użytkownicy są przekierowywani do panelu głównego
-
-### Wylogowanie (LogoutButton)
-
-- Wywołanie metody logout() z AuthContext
-
-- Usunięcie sesji w Keycloak i aplikacji
-
-## Wymagania systemowe
+## System Requirements
 
 - Docker Desktop
-
-- DockerHub
-
+- DockerHub account
 - Node.js v16+
-
 - kubectl
 
-# Uruchomienie projektu krok po kroku
+## Getting Started
 
-## 1. Sklonuj repozytorium
+### 1. Build and Publish Frontend Image
 
-## 2. Zbuduj i opublikuj obraz Dockera dla FE
+Navigate to the frontend directory, build the image, and push it to your DockerHub repository:
 
+```bash
 cd frontend
-
-docker build -t twoj-dockerhub-uzytkownik/my-frontend-image:latest .
-
-docker push twoj-dockerhub-uzytkownik/my-frontend-image:latest
-
+docker build -t your-dockerhub-username/my-frontend-image:latest .
+docker push your-dockerhub-username/my-frontend-image:latest
 cd ..
 
-## 3. W pliku frontend-deployment.yaml trzeba w nazwie obrazu zmienic login na swój
+```
 
-        containers:
-                        - name: frontend
-                          image: wheezybatom/my-frontend-image:latest
+### 2. Update Kubernetes Manifests
 
-## 4. Wdróż aplikację w Kubernetes
+In `k8s/frontend-deployment.yaml`, update the image field with your DockerHub login:
 
+```yaml
+containers:
+      - name: frontend
+        image: your-dockerhub-username/my-frontend-image:latest
+```
+
+### 3. Deploy to Kubernetes
+
+Apply all manifests in the `k8s/` directory:
+
+```bash
 kubectl apply -f k8s/
 
-## 5. Sprawdź status wdrożenia
+```
 
+### 4. Verify Deployment
+
+Wait for all pods to reach the `Running` state (approximately 1-2 minutes):
+
+```bash
 kubectl get pods --watch
 
-Czekaj aż wszystkie pody będą w stanie Running (może to zająć 1-2 minuty).
+```
 
-## 6. Może być konieczne załadowanie realma do keycloaka
+### 5. Keycloak Configuration
 
-W tym celu należy stworzyć nowy realm i załadować plik keycloak/realm-config.json
+You may need to manually create the realm and import the configuration using `keycloak/realm-config.json`.
 
-## Testowanie aplikacji
+## Testing the Application
 
-Dane testowe
+### Access Points
 
-### Strona aplikacji
+- **Application URL**: [http://localhost/](https://www.google.com/search?q=http://localhost/)
+- **Keycloak Admin Console**: [http://localhost:8080/admin](https://www.google.com/search?q=http://localhost:8080/admin) (Credentials: `admin`/`admin`)
 
-http://localhost/
+### Test Credentials
 
-### Użytkownik - admin
-
-Hasło - admin1
-
-Rola - admin1
-
-### Użytkownik - user1
-
-Hasło - pass1
-
-Rola - user
-
-### Strona keycloak
-
-http://localhost:8080/admin
-
-### Użytkownik - admin
-
-Hasło - admin
+| Username   | Password | Roles       |
+| ---------- | -------- | ----------- |
+| **admin1** | `admin1` | admin, user |
+| **user1**  | `pass1`  | user        |
