@@ -1,4 +1,4 @@
-//oauth-project/frontend/src/App.jsx
+//frontend/src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import MainPanel from "./components/MainPanel";

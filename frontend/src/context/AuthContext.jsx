@@ -1,3 +1,4 @@
+//frontend/src/contextAuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserManager, WebStorageStateStore } from "oidc-client-ts";
 

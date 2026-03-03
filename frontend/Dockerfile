@@ -1,4 +1,4 @@
-#oauth-project/frontend/Dockerfile
+#frontend/Dockerfile
 FROM node:16-alpine AS builder
 WORKDIR /app
 COPY package.json .

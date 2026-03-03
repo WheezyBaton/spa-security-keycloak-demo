@@ -1,4 +1,4 @@
-#oauth-project/k8s/keycloak-configmap.yaml
+#k8s/keycloak-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:

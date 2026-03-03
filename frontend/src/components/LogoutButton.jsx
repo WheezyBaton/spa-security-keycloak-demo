@@ -1,4 +1,4 @@
-//oauth-project/frontend/src/components/LogoutButton.jsx
+//frontend/src/components/LogoutButton.jsx
 import { useAuth } from "../context/AuthContext";
 
 const LogoutButton = () => {

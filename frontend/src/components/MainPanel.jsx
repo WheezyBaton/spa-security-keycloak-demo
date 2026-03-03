@@ -1,4 +1,4 @@
-//oauth-project/frontend/src/components/MainPanel.jsx
+//frontend/src/components/MainPanel.jsx
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 

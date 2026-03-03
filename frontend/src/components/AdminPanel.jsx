@@ -1,4 +1,4 @@
-//oauth-project/frontend/src/components/AdminPanel.jsx
+//frontend/src/components/AdminPanel.jsx
 import { useAuth } from "../context/AuthContext";
 
 const AdminPanel = () => {

@@ -1,4 +1,4 @@
-#oauth-project/k8s/frontend-deployment.yaml
+#k8s/frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

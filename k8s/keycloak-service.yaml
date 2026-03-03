@@ -1,4 +1,4 @@
-#oauth-project/k8s/keycloak-service.yaml
+#k8s/keycloak-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
