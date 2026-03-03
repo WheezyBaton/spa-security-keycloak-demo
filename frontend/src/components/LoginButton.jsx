@@ -6,7 +6,7 @@ const LoginButton = () => {
 
       return (
             <button onClick={login} className="login-btn">
-                  Zaloguj
+                  Login
             </button>
       );
 };

@@ -6,9 +6,9 @@ const LogoutButton = () => {
 
       return (
             <div className="user-info">
-                  <span>Witaj, {user?.given_name || user?.preferred_username}</span>
+                  <span>Welcome, {user?.given_name || user?.preferred_username}</span>
                   <button onClick={logout} className="logout-btn">
-                        Wyloguj
+                        Logout
                   </button>
             </div>
       );

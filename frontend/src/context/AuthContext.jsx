@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { UserManager, WebStorageStateStore } from "oidc-client-ts";
 
 const AuthContext = createContext(null);

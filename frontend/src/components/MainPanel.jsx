@@ -7,15 +7,15 @@ const MainPanel = () => {
 
       return (
             <div className="panel">
-                  <h2>Panel główny</h2>
+                  <h2>Main Panel</h2>
                   {isAuthenticated ? (
                         <>
-                              <p>Zalogowany jako: {user?.preferred_username}</p>
-                              <p>Twoje role: {user?.roles?.join(", ")}</p>
-                              {user?.roles.includes("admin") && <Link to="/admin">Przejdź do panelu admina</Link>}
+                              <p>Logged in as: {user?.preferred_username}</p>
+                              <p>Your roles: {user?.roles?.join(", ")}</p>
+                              {user?.roles.includes("admin") && <Link to="/admin">Go to admin panel</Link>}
                         </>
                   ) : (
-                        <p>Zaloguj się aby zobaczyć zawartość</p>
+                        <p>Log in to see content</p>
                   )}
             </div>
       );

@@ -10,7 +10,7 @@ function App() {
       const { isAuthenticated, user, isLoading } = useAuth();
 
       if (isLoading) {
-            return <div>Ładowanie...</div>;
+            return <div>Loading...</div>;
       }
 
       return (

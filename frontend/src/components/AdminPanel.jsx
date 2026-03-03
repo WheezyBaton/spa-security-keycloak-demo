@@ -6,14 +6,14 @@ const AdminPanel = () => {
 
       return (
             <div className="panel admin-panel">
-                  <h2>Panel Administratora</h2>
+                  <h2>Administrator Panel</h2>
                   {user?.roles.includes("admin") ? (
                         <div className="admin-data">
-                              <h3>Witaj w panelu administracyjnym</h3>
-                              <p>Masz pełne uprawnienia administracyjne w systemie</p>
+                              <h3>Welcome to the admin panel</h3>
+                              <p>You have full administrative privileges in the system</p>
                         </div>
                   ) : (
-                        <div className="error">Brak uprawnień administratora</div>
+                        <div className="error">You do not have administrator privileges</div>
                   )}
             </div>
       );
